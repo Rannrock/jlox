@@ -9,7 +9,14 @@ import static org.example.TokenType.*;
 
 public class Scanner {
 
+    /**
+     * The source code as string, like : var foo = 2 + (3 * 4) - 5
+     */
     private final String source;
+
+    /**
+     * The final Token list created by the scanner.
+     */
     private final List<Token> tokens = new ArrayList<>();
 
     /**
@@ -84,6 +91,8 @@ public class Scanner {
             case '/':
                 if (match('/')) {
                     while (peek() != '\n' && !isAtEnd()) advance();
+                } else if (match('*')) {
+                    while ((peek() != '*' && peekNext() != '/' && !isAtEnd()) ) advance();
                 } else {
                     addToken(SLASH);
                 }
@@ -155,14 +164,16 @@ public class Scanner {
     }
 
     /**
-     * Return char at current position.
-     * @return
+     * @return char at current position and not consume it.
      */
     private char peek() {
         if (isAtEnd()) return '\0';
         return source.charAt(current);
     }
 
+    /**
+     * @return char at current position + 1 and not consume it.
+     */
     private char peekNext() {
         if (current + 1 >= source.length()) return '\0';
         return source.charAt(current + 1);
@@ -182,10 +193,18 @@ public class Scanner {
         return c >= '0' && c <= '9';
     }
 
+    /**
+     *
+     * @return True, if current is greater than the source length.
+     */
     private boolean isAtEnd() {
         return current >= source.length();
     }
 
+    /**
+     * @return char at current position and consume it.
+     * Unlike in peek() and peekNext() method, the current value is increment by 1 at each call.
+     */
     private char advance() {
         return source.charAt(current++);
     }
