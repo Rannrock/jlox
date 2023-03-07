@@ -1,0 +1,10 @@
+var foo = 2 * (3 + 4) - 5;
+
+// Un commentaire
+
+var bar = "value";
+
+/* Un commentaire sur
+plusieurs ligne */
+
+var baz = 2 / 4;
